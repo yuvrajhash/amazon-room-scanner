@@ -1,0 +1,6 @@
+# robots.txt file for Amazon Room Scanner
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://amazon-room-scanner.netlify.app/sitemap.xml

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Clone with AI Room Scanner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #EAEDED;
+        }
+        
+        /* Header styles */
+        .header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            background-color: #131921;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-logo {
+            width: 100px;
+            margin: 0 20px;
+            margin-top: 10px;
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+        }
+        
+        .header-search {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            border-radius: 24px;
+        }
+        
+        .header-search-input {
+            height: 40px;
+            padding: 10px;
+            border: none;
+            width: 100%;
+        }
+        
+        .header-search-icon {
+            padding: 5px;
+            height: 40px;
+            background-color: #febd69;
+            border: none;
+            width: 50px;
+            color: black;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header-option {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+            margin-right: 10px;
+            color: white;
+        }
+        
+        .header-nav {
+            display: flex;
+            justify-content: space-evenly;
+        }
+        
+        .header-option-line-one {
+            font-size: 10px;
+        }
+        
+        .header-option-line-two {
+            font-size: 13px;
+            font-weight: 800;
+        }
+        
+        .header-option-basket {
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .header-basket-count {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        /* Scanner button styles */
+        .header-option-scanner {
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-right: 10px;
+            background-color: #232f3e;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .header-option-scanner:hover {
+            background-color: #3a4553;
+        }
+
+        .header-option-scanner span {
+            margin-left: 5px;
+            font-weight: bold;
+        }
+        
+        /* Navigation bar styles */
+        .nav {
+            height: 39px;
+            display: flex;
+            align-items: center;
+            background-color: #232f3e;
+            color: white;
+            padding-left: 10px;
+        }
+        
+        .nav-option {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        /* Hero section */
+        .hero {
+            position: relative;
+            height: 300px;
+            background-color: #88b0ce;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        /* Products section */
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        
+        .product {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+            max-height: 400px;
+            min-width: 100px;
+            background-color: white;
+            z-index: 1;
+        }
+        
+        .product-rating {
+            display: flex;
+        }
+        
+        .product > img {
+            max-height: 200px;
+            width: 100%;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        
+        .product > button {
+            background: #f0c14b;
+            border: 1px solid;
+            margin-top: 10px;
+            border-color: #a88734 #9c7e31 #846a29;
+            color: #111;
+            padding: 5px 10px;
+        }
+        
+        .product-price {
+            margin-top: 5px;
+        }
+        
+        .product-info {
+            height: 100px;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #131A22;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: space-evenly;
+            margin-bottom: 20px;
+        }
+        
+        .footer-column {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        
+        .footer-column h4 {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #DDD;
+            text-decoration: none;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* Scanner page styles */
+        .scanner-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .scanner-container.active {
+            display: flex;
+        }
+
+        .scanner-content {
+            width: 90%;
+            max-width: 800px;
+            background-color: #232f3e;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .scanner-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .scanner-button {
+            background-color: #febd69;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .scanner-results {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .scanner-results.active {
+            display: block;
+        }
+
+        .recommended-products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .recommended-product {
+            width: 200px;
+            background-color: white;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            color: black;
+        }
+
+        .recommended-product img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-logo">amazon</div>
+        <div class="header-search">
+            <input class="header-search-input" type="text" />
+            <div class="header-search-icon">🔍</div>
+        </div>
+        <div class="header-nav">
+            <div class="header-option">
+                <span class="header-option-line-one">Hello, Sign in</span>
+                <span class="header-option-line-two">Account & Lists</span>
+            </div>
+            <div class="header-option">
+                <span class="header-option-line-one">Returns</span>
+                <span class="header-option-line-two">& Orders</span>
+            </div>
+            <div class="header-option-basket">
+                <span>🛒</span>
+                <span class="header-basket-count">0</span>
+            </div>
+            <div class="header-option-scanner" id="open-scanner">
+                <span>📷</span>
+                <span>Room Scanner</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <div class="nav-option">All</div>
+        <div class="nav-option">Today's Deals</div>
+        <div class="nav-option">Customer Service</div>
+        <div class="nav-option">Registry</div>
+        <div class="nav-option">Gift Cards</div>
+        <div class="nav-option">Sell</div>
+    </div>
+
+    <!-- Hero section -->
+    <div class="hero">
+        <h1>Welcome to Amazon Clone</h1>
+    </div>
+
+    <!-- Products section -->
+    <div class="products">
+        <!-- Product 1 -->
+        <div class="product">
+            <div class="product-info">
+                <p>The Lean Startup: How Constant Innovation Creates Radically Successful Businesses</p>
+                <div class="product-price">
+                    <small>$</small>
+                    <strong>19.99</strong>
+                </div>
+                <div class="product-rating">
+                    ⭐⭐⭐⭐⭐
+                </div>
+            </div>
+            <img src="/api/placeholder/150/150" alt="The Lean Startup book" />
+            <button>Add to Basket</button>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product">
+            <div class="product-info">
+                <p>Kenwood kMix Stand Mixer for Baking, Stylish Kitchen Mixer with K-beater</p>
+                <div class="product-price">
+                    <small>$</small>
+                    <strong>239.00</strong>
+                </div>
+                <div class="product-rating">
+                    ⭐⭐⭐⭐
+                </div>
+            </div>
+            <img src="/api/placeholder/150/150" alt="Kenwood kMix Stand Mixer" />
+            <button>Add to Basket</button>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product">
+            <div class="product-info">
+                <p>Samsung LC49RG90SSUXEN 49' Curved LED Gaming Monitor</p>
+                <div class="product-price">
+                    <small>$</small>
+                    <strong>999.99</strong>
+                </div>
+                <div class="product-rating">
+                    ⭐⭐⭐
+                </div>
+            </div>
+            <img src="/api/placeholder/150/150" alt="Samsung Monitor" />
+            <button>Add to Basket</button>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product">
+            <div class="product-info">
+                <p>Amazon Echo (3rd generation) | Smart speaker with Alexa</p>
+                <div class="product-price">
+                    <small>$</small>
+                    <strong>99.99</strong>
+                </div>
+                <div class="product-rating">
+                    ⭐⭐⭐⭐⭐
+                </div>
+            </div>
+            <img src="/api/placeholder/150/150" alt="Amazon Echo" />
+            <button>Add to Basket</button>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="product">
+            <div class="product-info">
+                <p>New Apple iPad Pro (12.9-inch, Wi-Fi, 128GB) - Silver (4th Generation)</p>
+                <div class="product-price">
+                    <small>$</small>
+                    <strong>799.99</strong>
+                </div>
+                <div class="product-rating">
+                    ⭐⭐⭐⭐
+                </div>
+            </div>
+            <img src="/api/placeholder/150/150" alt="iPad Pro" />
+            <button>Add to Basket</button>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="product">
+            <div class="product-info">
+                <p>DJI Mavic Air 2 Fly More Combo, Drone with Camera</p>
+                <div class="product-price">
+                    <small>$</small>
+                    <strong>1299.99</strong>
+                </div>
+                <div class="product-rating">
+                    ⭐⭐⭐⭐⭐
+                </div>
+            </div>
+            <img src="/api/placeholder/150/150" alt="DJI Mavic Air" />
+            <button>Add to Basket</button>
+        </div>
+    </div>
+
+    <!-- Scanner Modal -->
+    <div class="scanner-container" id="scanner-modal">
+        <div class="scanner-close" id="close-scanner">×</div>
+        <div class="scanner-content">
+            <h2>Amazon AI Room Scanner</h2>
+            <p>Scan your room to get personalized product recommendations that match your style and space.</p>
+            <button class="scanner-button" id="start-scan">Start Room Scan</button>
+            
+            <div class="scanner-results" id="scanner-results">
+                <h3>Your Room Analysis</h3>
+                <div id="style-result">
+                    <h4>Detected Style: <span id="detected-style">Modern</span></h4>
+                    <p>Room Dimensions: <span id="room-dimensions">4.5m × 3.2m × 2.8m</span></p>
+                </div>
+                
+                <h3>Recommended Products for Your Space</h3>
+                <div class="recommended-products" id="recommended-products">
+                    <!-- Recommended products will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-links">
+            <div class="footer-column">
+                <h4>Get to Know Us</h4>
+                <a href="#">Careers</a>
+                <a href="#">About Amazon</a>
+                <a href="#">Investor Relations</a>
+                <a href="#">Amazon Devices</a>
+            </div>
+            <div class="footer-column">
+                <h4>Make Money with Us</h4>
+                <a href="#">Sell on Amazon</a>
+                <a href="#">Sell Under Amazon Accelerator</a>
+                <a href="#">Amazon Associates</a>
+                <a href="#">Advertise Your Products</a>
+            </div>
+            <div class="footer-column">
+                <h4>Amazon Payment Products</h4>
+                <a href="#">Amazon Business Card</a>
+                <a href="#">Shop with Points</a>
+                <a href="#">Reload Your Balance</a>
+                <a href="#">Amazon Currency Converter</a>
+            </div>
+            <div class="footer-column">
+                <h4>Let Us Help You</h4>
+                <a href="#">Amazon and COVID-19</a>
+                <a href="#">Your Account</a>
+                <a href="#">Your Orders</a>
+                <a href="#">Shipping Rates & Policies</a>
+                <a href="#">Returns & Replacements</a>
+            </div>
+        </div>
+        <p>&copy; 2025 Amazon Clone</p>
+    </div>
+
+    <!-- Scanner JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openScannerBtn = document.getElementById('open-scanner');
+            const closeScannerBtn = document.getElementById('close-scanner');
+            const scannerModal = document.getElementById('scanner-modal');
+            const startScanBtn = document.getElementById('start-scan');
+            const scannerResults = document.getElementById('scanner-results');
+            const detectedStyleEl = document.getElementById('detected-style');
+            const roomDimensionsEl = document.getElementById('room-dimensions');
+            const recommendedProductsEl = document.getElementById('recommended-products');
+            
+            // Open scanner modal
+            openScannerBtn.addEventListener('click', function() {
+                scannerModal.classList.add('active');
+            });
+            
+            // Close scanner modal
+            closeScannerBtn.addEventListener('click', function() {
+                scannerModal.classList.remove('active');
+            });
+            
+            // Start scan process
+            startScanBtn.addEventListener('click', function() {
+                // In a real implementation, this would trigger the WebXR scanning
+                // For demo purposes, we'll simulate a scan completion after 3 seconds
+                startScanBtn.textContent = 'Scanning...';
+                startScanBtn.disabled = true;
+                
+                setTimeout(function() {
+                    // Simulate scan completion
+                    const styles = ['Modern', 'Scandinavian', 'Industrial', 'Bohemian', 'Minimalist'];
+                    const randomStyle = styles[Math.floor(Math.random() * styles.length)];
+                    
+                    // Generate random room dimensions
+                    const width = (3 + Math.random() * 3).toFixed(1);
+                    const length = (3 + Math.random() * 3).toFixed(1);
+                    const height = (2.4 + Math.random() * 1).toFixed(1);
+                    
+                    // Update UI with results
+                    detectedStyleEl.textContent = randomStyle;
+                    roomDimensionsEl.textContent = `${width}m × ${length}m × ${height}m`;
+                    
+                    // Generate recommended products
+                    generateRecommendedProducts(randomStyle);
+                    
+                    // Show results
+                    scannerResults.classList.add('active');
+                    startScanBtn.textContent = 'Scan Again';
+                    startScanBtn.disabled = false;
+                }, 3000);
+            });
+            
+            // Generate recommended products based on style
+            function generateRecommendedProducts(style) {
+                // Clear previous recommendations
+                recommendedProductsEl.innerHTML = '';
+                
+                // Product data based on style
+                const productsByStyle = {
+                    'Modern': [
+                        { name: 'Modern Minimalist Desk', price: 149.99, rating: 4.5 },
+                        { name: 'Contemporary Office Chair', price: 189.99, rating: 4.2 },
+                        { name: 'LED Floor Lamp', price: 79.99, rating: 4.7 }
+                    ],
+                    'Scandinavian': [
+                        { name: 'Light Wood Desk with Storage', price: 199.99, rating: 4.7 },
+                        { name: 'White Ergonomic Chair', price: 159.99, rating: 4.4 },
+                        { name: 'Minimalist Pendant Light', price: 89.99, rating: 4.6 }
+                    ],
+                    'Industrial': [
+                        { name: 'Metal and Wood Industrial Desk', price: 229.99, rating: 4.6 },
+                        { name: 'Vintage-Style Leather Chair', price: 249.99, rating: 4.8 },
+                        { name: 'Edison Bulb Wall Sconce', price: 69.99, rating: 4.3 }
+                    ],
+                    'Bohemian': [
+                        { name: 'Reclaimed Wood Writing Desk', price: 179.99, rating: 4.4 },
+                        { name: 'Colorful Accent Chair', price: 219.99, rating: 4.5 },
+                        { name: 'Macrame Wall Hanging', price: 49.99, rating: 4.7 }
+                    ],
+                    'Minimalist': [
+                        { name: 'Simple White Desk', price: 129.99, rating: 4.3 },
+                        { name: 'Black Mesh Office Chair', price: 149.99, rating: 4.1 },
+                        { name: 'Adjustable Task Lamp', price: 59.99, rating: 4.5 }
+                    ]
+                };
+                
+                // Get products for the detected style or use default
+                const products = productsByStyle[style] || productsByStyle['Modern'];
+                
+                // Create product elements
+                products.forEach(product => {
+                    const productEl = document.createElement('div');
+                    productEl.className = 'recommended-product';
+                    
+                    const stars = '⭐'.repeat(Math.floor(product.rating)) + 
+                                (product.rating % 1 >= 0.5 ? '⭐' : '');
+                    
+                    productEl.innerHTML = `
+                        <img src="/api/placeholder/150/150" alt="${product.name}">
+                        <h4>${product.name}</h4>
+                        <div class="product-price">
+                            <small>$</small>
+                            <strong>${product.price}</strong>
+                        </div>
+                        <div class="product-rating">${stars}</div>
+                        <button>Add to Basket</button>
+                    `;
+                    
+                    recommendedProductsEl.appendChild(productEl);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

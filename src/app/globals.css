@@ -1,8 +1,52 @@
 @import "tailwindcss";
+@import "./responsive.css";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --amazon-orange: #FF9900;
+  --amazon-orange-light: #febd69;
+  --amazon-blue: #131921;
+  --amazon-blue-light: #232f3e;
+  --amazon-yellow: #FFD814;
+  
+  /* Responsive variables */
+  --mobile-breakpoint: 640px;
+  --tablet-breakpoint: 768px;
+  --desktop-breakpoint: 1024px;
+}
+
+/* Amazon specific utility classes */
+.bg-amazon-orange {
+  background-color: var(--amazon-orange);
+}
+
+.bg-amazon-orange-light {
+  background-color: var(--amazon-orange-light);
+}
+
+.bg-amazon-blue {
+  background-color: var(--amazon-blue);
+}
+
+.bg-amazon-blue-light {
+  background-color: var(--amazon-blue-light);
+}
+
+.bg-amazon-yellow {
+  background-color: var(--amazon-yellow);
+}
+
+.text-amazon-orange {
+  color: var(--amazon-orange);
+}
+
+.ring-amazon-orange {
+  --tw-ring-color: var(--amazon-orange);
+}
+
+.border-amazon-orange {
+  border-color: var(--amazon-orange);
 }
 
 @theme inline {
@@ -23,4 +67,29 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive viewport height fix for mobile browsers */
+@supports (height: 100dvh) {
+  .h-screen {
+    height: 100dvh;
+  }
+}
+
+/* Prevent overscroll on mobile devices */
+html, body {
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+  height: 100%;
+}
+
+/* Ensure AR content is visible on all devices */
+.ar-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
