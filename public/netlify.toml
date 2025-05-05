@@ -1,0 +1,22 @@
+# Netlify configuration file for client-side routing with Next.js
+[build]
+  publish = ".next"
+
+# Handle client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = true
+
+# Handle Next.js specific routes
+[[redirects]]
+  from = "/_next/*"
+  to = "/_next/:splat"
+  status = 200
+
+# Handle API routes
+[[redirects]]
+  from = "/api/*"
+  to = "/api/:splat"
+  status = 200

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Room Scanner | AI-Powered Room Design</title>
+  <script>
+    // This script handles client-side routing for SPAs on Netlify
+    // It ensures that all routes are properly handled by the Next.js router
+    (function() {
+      // Get the current path
+      var path = window.location.pathname;
+      
+      // If we're on a 404 page, redirect to the homepage
+      if (path === '/404.html' || path === '/404') {
+        window.location.href = '/';
+        return;
+      }
+      
+      // Otherwise, let the SPA router handle it
+      // This file will be served for all routes that don't match static files
+      // The Next.js client-side router will take over from here
+    })();
+  </script>
+</head>
+<body>
+  <div id="__next">
+    <!-- Next.js will render the application here -->
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+      <div>
+        <h1>Loading Amazon Room Scanner...</h1>
+        <p>If this page doesn't redirect automatically, please <a href="/">click here</a> to go to the homepage.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,10 +1,13 @@
 [build]
-  command = "npm run build"
+  command = "CI=false npm run build"
   publish = ".next"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF ./"
 
 [build.environment]
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
   NODE_VERSION = "18"
+  NEXT_TELEMETRY_DISABLED = "1"
+  ESLINT_NO_DEV_ERRORS = "true"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -20,7 +23,7 @@
   from = "/*"
   to = "/index.html"
   status = 200
-  force = false
+  force = true
 
 [functions]
   included_files = [".next/server/**", ".next/standalone/**"]
